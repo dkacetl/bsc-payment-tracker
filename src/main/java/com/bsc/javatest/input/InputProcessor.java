@@ -1,6 +1,7 @@
 package com.bsc.javatest.input;
 
 import com.bsc.javatest.Payment;
+import com.bsc.javatest.output.IOutputGenerator;
 import com.bsc.javatest.parser.IPaymentParser;
 import com.bsc.javatest.parser.ValidationException;
 import com.bsc.javatest.tracker.IPaymentTrackerService;
@@ -26,16 +27,19 @@ public class InputProcessor implements IInputProcessor {
 
     private IPaymentTrackerService paymentTrackerService;
     private IPaymentParser paymentParser;
+    private IOutputGenerator outputGenerator;
 
     /**
      * Constructor injection
      *
-     * @param paymentTrackerService
-     * @param paymentParser
+     * @param paymentTrackerService - tracker for payments
+     * @param paymentParser - user defined payment parser
+     * @param outputGenerator - for command 'status', show the tracked payments
      */
-    public InputProcessor(IPaymentTrackerService paymentTrackerService, IPaymentParser paymentParser) {
+    public InputProcessor(IPaymentTrackerService paymentTrackerService, IPaymentParser paymentParser, IOutputGenerator outputGenerator) {
         this.paymentTrackerService = paymentTrackerService;
         this.paymentParser = paymentParser;
+        this.outputGenerator = outputGenerator;
     }
 
     /**
@@ -49,10 +53,17 @@ public class InputProcessor implements IInputProcessor {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
         String s;
-        while ((s = br.readLine()) != null && s.length() != 0 && !s.trim().toLowerCase().equals("quit")) {
+        while ((s = br.readLine()) != null && s.length() != 0) {
             try {
-                Payment payment = paymentParser.parse(s);
-                paymentTrackerService.pay(payment);
+                if (s.trim().toLowerCase().equals("quit")) {
+                    return;
+                }
+                if (s.trim().toLowerCase().equals("status")) {
+                    outputGenerator.generate(System.out);
+                } else {
+                    Payment payment = paymentParser.parse(s);
+                    paymentTrackerService.pay(payment);
+                }
             } catch (ValidationException e) {
                 LOGGER.log(Level.SEVERE,"Error parsing input "+s, e);
             }

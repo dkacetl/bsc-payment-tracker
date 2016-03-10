@@ -10,6 +10,7 @@ import com.bsc.javatest.tracker.IPaymentTrackerService;
 import com.bsc.javatest.tracker.PaymentTrackerService;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -20,23 +21,37 @@ public class PaymentTrackerApp
 {
     public static void main( String[] args ) throws IOException
     {
+        System.out.println("==============================================");
+        System.out.println(" Payment tracker");
+        System.out.println("");
+        System.out.println(" '<CURRENCY> <AMOUNT>' - add payment");
+        System.out.println(" 'quit'                - for quit");
+        System.out.println(" 'status'              - for status");
+        System.out.println("==============================================");
+        // init core service
         IPaymentTrackerService paymentTrackerService = new PaymentTrackerService();
+
+        // output generator and thread
         IOutputGenerator outputGenerator = new OutputGenerator(new PaymentFormatter(), paymentTrackerService);
-        new OutputGeneratorThread(outputGenerator,System.out).start();
+        new OutputGeneratorThread(outputGenerator, System.out).start();
 
-        InputProcessor r = new InputProcessor(paymentTrackerService, new PaymentParser());
+        // input processor
+        InputProcessor r = new InputProcessor(paymentTrackerService, new PaymentParser(), outputGenerator);
 
-        String data = "USD 1000\n" +
-                        "HKD 100\n" +
-                        "USD -100\n" +
-                        "RMB 2000\n" +
-                        "RMB -2000\n" +
-                        "HKD 200";
+        // handle file
+        if (args.length==1) {
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(args[0]);
+                r.process(fis);
+                System.out.println("File "+args[0] + " loaded.");
+            } finally {
+                if (fis!=null) { fis.close(); }
+            }
 
-        ByteArrayInputStream is = new ByteArrayInputStream(data.getBytes()); // used default charset
-        r.process(is);
+        }
 
+        // handle user input
         r.process(System.in);
-
     }
 }

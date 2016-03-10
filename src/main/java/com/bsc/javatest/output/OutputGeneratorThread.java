@@ -10,7 +10,7 @@ import java.io.PrintStream;
  */
 public class OutputGeneratorThread extends Thread {
 
-    private static final int SLEEP = 5000;
+    private static final int SLEEP = 60000;
 
     private IOutputGenerator outputGenerator;
 

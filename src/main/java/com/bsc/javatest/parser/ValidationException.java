@@ -1,6 +1,8 @@
 package com.bsc.javatest.parser;
 
 /**
+ * Used for invalid user input of payment
+ *
  * Created by dkacetl on 9.3.16.
  */
 public class ValidationException extends RuntimeException {
@@ -23,12 +25,6 @@ public class ValidationException extends RuntimeException {
 
     public ValidationException(Throwable cause, String invalidInput) {
         super(cause);
-        this.invalidInput = invalidInput;
-    }
-
-    public ValidationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
-            String invalidInput) {
-        super(message, cause, enableSuppression, writableStackTrace);
         this.invalidInput = invalidInput;
     }
 }
