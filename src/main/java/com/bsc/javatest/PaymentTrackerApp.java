@@ -14,8 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
- * Hello world!
- *
+ * Main class
  */
 public class PaymentTrackerApp
 {
