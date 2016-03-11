@@ -65,7 +65,7 @@ public class InputProcessor implements IInputProcessor {
                     paymentTrackerService.pay(payment);
                 }
             } catch (ValidationException e) {
-                LOGGER.log(Level.SEVERE,"Error parsing input "+s, e);
+                LOGGER.log(Level.SEVERE,"Error parsing input '"+s+"'. Detail:"+e.getMessage());
             }
         }
     }

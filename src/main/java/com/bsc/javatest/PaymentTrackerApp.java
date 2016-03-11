@@ -20,13 +20,13 @@ public class PaymentTrackerApp
 {
     public static void main( String[] args ) throws IOException
     {
-        System.out.println("==============================================");
+        System.out.println("=======================================================================");
         System.out.println(" Payment tracker");
         System.out.println("");
         System.out.println(" '<CURRENCY> <AMOUNT>' - add payment");
         System.out.println(" 'quit'                - for quit");
-        System.out.println(" 'status'              - for status");
-        System.out.println("==============================================");
+        System.out.println(" 'status'              - for status (thread does the same every minute)");
+        System.out.println("========================================================================");
         // init core service
         IPaymentTrackerService paymentTrackerService = new PaymentTrackerService();
 
